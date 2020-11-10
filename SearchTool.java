@@ -51,7 +51,7 @@ public class SearchTool {
 	JTextField srcText, keyText, startText, endText, destText;
 	JButton startBtn, cancelBtn;
 	JLabel srcLbl, keyLbl, startLbl, endLbl, destLbl, infoLbl, copyright;
-    	JProgressBar bar;
+	JProgressBar bar;
 	JFrame frame;
 	SwingWorker<Void, Void> worker;
 	
@@ -61,7 +61,7 @@ public class SearchTool {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date1 = new Date();
 		    
-	    	// get list of files in given directory
+		// get list of files in given directory
 		File[] files = src.listFiles();
 		int size = files.length;
 		
@@ -84,36 +84,36 @@ public class SearchTool {
 			
 			lastModified = file.lastModified();
 			
-		    	if (file.isFile() && lastModified < endTick && lastModified >= startTick) {
-		    	
+			if (file.isFile() && lastModified < endTick && lastModified >= startTick) {
+
 				Reader reader = new InputStreamReader(new FileInputStream(file));
 					BufferedReader reader1 = new BufferedReader(reader);
 				try {
 					String line = reader1.readLine();
-						while(line != null) {
+					while(line != null) {
 
-							// Match found
-							if (line.contains(pattern)) {
-								count++;
-								System.out.println("Match found in file " + file.getName());
+						// Match found
+						if (line.contains(pattern)) {
+							count++;
+							System.out.println("Match found in file " + file.getName());
 
-							try {
-									Files.copy(file.toPath(), (new File(dest.getAbsolutePath() + "\\" + file.getName())).toPath(), 
-												StandardCopyOption.REPLACE_EXISTING);
-								} catch (IOException e) {
-									System.out.println("Failed to copy file " + file.getName() + " to " + dest);
-								}
-								break;
+						try {
+							Files.copy(file.toPath(), (new File(dest.getAbsolutePath() + "\\" + file.getName())).toPath(), 
+											StandardCopyOption.REPLACE_EXISTING);
+							} catch (IOException e) {
+								System.out.println("Failed to copy file " + file.getName() + " to " + dest);
 							}
-
-						    line = reader1.readLine();
+							break;
 						}
+
+						line = reader1.readLine();
+					}
 					reader.close();
 					reader1.close();
 				} catch (IOException e) {
 					System.out.println("Failed to read file " + file.getName());
 				}
-		    	}
+			}
 		}
 
 		Date date2 = new Date();
@@ -122,7 +122,7 @@ public class SearchTool {
 		System.out.println("End time " + dateFormat.format(date2));
 
 		infoLbl.setText("Done");
-        	JOptionPane.showMessageDialog(frame, "Done! Total: " + count + " file(s) matched");
+		JOptionPane.showMessageDialog(frame, "Done! Total: " + count + " file(s) matched");
 		
 	}
 	
@@ -136,7 +136,7 @@ public class SearchTool {
 				throw new IllegalArgumentException("Source has to be a directory");
 		}
 	    
-	    	String pattern = keyText.getText();  
+		String pattern = keyText.getText();  
 		if (pattern.isEmpty()) {
 			JOptionPane.showMessageDialog(frame, "Keyword cannot empty");
 				throw new IllegalArgumentException("Keyword cannot empty");
@@ -146,15 +146,15 @@ public class SearchTool {
 		String endDateString = endText.getText();
 		
 		if (startDateString.isEmpty() || endDateString.isEmpty()) {
-	    		JOptionPane.showMessageDialog(frame, "Date cannot empty");
+			JOptionPane.showMessageDialog(frame, "Date cannot empty");
 				throw new IllegalArgumentException("Date cannot be empty");
 		}
 		
 		File dest = new File(destText.getText());
-	    	if (!dest.isDirectory()) {
+		if (!dest.isDirectory()) {
 			JOptionPane.showMessageDialog(frame, "Destination has to be a directory");
 			throw new IllegalArgumentException("Destination has to be a directory");
-	    	}
+		}
 		
 		try {
 			SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd");
