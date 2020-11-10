@@ -51,7 +51,7 @@ public class SearchTool {
 	JTextField srcText, keyText, startText, endText, destText;
 	JButton startBtn, cancelBtn;
 	JLabel srcLbl, keyLbl, startLbl, endLbl, destLbl, infoLbl, copyright;
-    JProgressBar bar;
+    	JProgressBar bar;
 	JFrame frame;
 	SwingWorker<Void, Void> worker;
 	
@@ -61,7 +61,7 @@ public class SearchTool {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date1 = new Date();
 		    
-	    // get list of files in given directory
+	    	// get list of files in given directory
 		File[] files = src.listFiles();
 		int size = files.length;
 		
@@ -84,36 +84,36 @@ public class SearchTool {
 			
 			lastModified = file.lastModified();
 			
-		    if (file.isFile() && lastModified < endTick && lastModified >= startTick) {
+		    	if (file.isFile() && lastModified < endTick && lastModified >= startTick) {
 		    	
-		    	Reader reader = new InputStreamReader(new FileInputStream(file));
-				BufferedReader reader1 = new BufferedReader(reader);
-		        try {
-		        	String line = reader1.readLine();
-					while(line != null) {
-						
-						// Match found
-						if (line.contains(pattern)) {
-							count++;
-							System.out.println("Match found in file " + file.getName());
-					        					
-					        try {
-								Files.copy(file.toPath(), (new File(dest.getAbsolutePath() + "\\" + file.getName())).toPath(), 
-											StandardCopyOption.REPLACE_EXISTING);
-							} catch (IOException e) {
-								System.out.println("Failed to copy file " + file.getName() + " to " + dest);
+				Reader reader = new InputStreamReader(new FileInputStream(file));
+					BufferedReader reader1 = new BufferedReader(reader);
+				try {
+					String line = reader1.readLine();
+						while(line != null) {
+
+							// Match found
+							if (line.contains(pattern)) {
+								count++;
+								System.out.println("Match found in file " + file.getName());
+
+							try {
+									Files.copy(file.toPath(), (new File(dest.getAbsolutePath() + "\\" + file.getName())).toPath(), 
+												StandardCopyOption.REPLACE_EXISTING);
+								} catch (IOException e) {
+									System.out.println("Failed to copy file " + file.getName() + " to " + dest);
+								}
+								break;
 							}
-							break;
+
+						    line = reader1.readLine();
 						}
-						
-					    line = reader1.readLine();
-					}
-			        reader.close();
-			        reader1.close();
+					reader.close();
+					reader1.close();
 				} catch (IOException e) {
 					System.out.println("Failed to read file " + file.getName());
 				}
-		    }
+		    	}
 		}
 
 		Date date2 = new Date();
@@ -122,7 +122,7 @@ public class SearchTool {
 		System.out.println("End time " + dateFormat.format(date2));
 
 		infoLbl.setText("Done");
-        JOptionPane.showMessageDialog(frame, "Done! Total: " + count + " file(s) matched");
+        	JOptionPane.showMessageDialog(frame, "Done! Total: " + count + " file(s) matched");
 		
 	}
 	
@@ -131,52 +131,51 @@ public class SearchTool {
 		// validate input
 		
 		File src = new File(srcText.getText());		
-	    if (!src.isDirectory()) {
-	    	JOptionPane.showMessageDialog(frame, "Source has to be a directory");
-	    	throw new IllegalArgumentException("Source has to be a directory");
-	    }
+		if (!src.isDirectory()) {
+			JOptionPane.showMessageDialog(frame, "Source has to be a directory");
+				throw new IllegalArgumentException("Source has to be a directory");
+		}
 	    
-	    String pattern = keyText.getText();  
+	    	String pattern = keyText.getText();  
 		if (pattern.isEmpty()) {
-	    	JOptionPane.showMessageDialog(frame, "Keyword cannot empty");
-			throw new IllegalArgumentException("Keyword cannot empty");
+			JOptionPane.showMessageDialog(frame, "Keyword cannot empty");
+				throw new IllegalArgumentException("Keyword cannot empty");
 		}
 		
 		String startDateString = startText.getText();
 		String endDateString = endText.getText();
 		
 		if (startDateString.isEmpty() || endDateString.isEmpty()) {
-	    	JOptionPane.showMessageDialog(frame, "Date cannot empty");
-			throw new IllegalArgumentException("Date cannot be empty");
+	    		JOptionPane.showMessageDialog(frame, "Date cannot empty");
+				throw new IllegalArgumentException("Date cannot be empty");
 		}
 		
 		File dest = new File(destText.getText());
-	    if (!dest.isDirectory()) {
-	    	JOptionPane.showMessageDialog(frame, "Destination has to be a directory");
-	    	throw new IllegalArgumentException("Destination has to be a directory");
-	    }
+	    	if (!dest.isDirectory()) {
+			JOptionPane.showMessageDialog(frame, "Destination has to be a directory");
+			throw new IllegalArgumentException("Destination has to be a directory");
+	    	}
 		
 		try {
-
 			SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd");
-		    Date startDate = f.parse(startDateString);
-		    long startTick = startDate.getTime();
-		    
-		    Date endDate = f.parse(endDateString);
-		    long endTick = endDate.getTime();
+			Date startDate = f.parse(startDateString);
+			long startTick = startDate.getTime();
 
-    		cancelBtn.setEnabled(true);
-        	toggleInput(false);
-    		infoLbl.setText("Preparing...");
+			Date endDate = f.parse(endDateString);
+			long endTick = endDate.getTime();
+
+			cancelBtn.setEnabled(true);
+			toggleInput(false);
+			infoLbl.setText("Preparing...");
     		
-		    // call method
+			// call method
 			searchFiles(src, pattern, startTick, endTick, dest);
 			
 		} catch(FileNotFoundException e) {
 			System.out.println("FileNotFound");			
 		} catch(ParseException e) {
 			System.out.println("ParseException: Date entered is not valid");
-	    	JOptionPane.showMessageDialog(frame, "Date entered is not valid");			
+			JOptionPane.showMessageDialog(frame, "Date entered is not valid");			
 		}
 	}
 	
@@ -190,8 +189,8 @@ public class SearchTool {
 	}
 	
 	private void openConfigFile(File file) {        
-        System.out.println("Reading input from config: " + file.getName());
-        try {
+		System.out.println("Reading input from config: " + file.getName());
+		try {
 			Scanner scanner = new Scanner(file);
 			String s1 = scanner.nextLine();
 			String s2 = scanner.nextLine();
@@ -212,16 +211,16 @@ public class SearchTool {
 	}
 	
 	private void saveConfigFile(File file) {
-        System.out.println("Saving config to: " + file.getName());
-        try {
+		System.out.println("Saving config to: " + file.getName());
+		try {
 			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-        	writer.println(srcText.getText());
-        	writer.println(keyText.getText());
-        	writer.println(startText.getText());
-        	writer.println(endText.getText());
-        	writer.println(destText.getText());
-        	
-        	writer.close();
+			writer.println(srcText.getText());
+			writer.println(keyText.getText());
+			writer.println(startText.getText());
+			writer.println(endText.getText());
+			writer.println(destText.getText());
+
+			writer.close();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(frame, "Failed to save file");
 		}
@@ -239,37 +238,37 @@ public class SearchTool {
 		menuBar.add(menu);
 		menuItemSave = new JMenuItem("Save");
 		menuItemSave.setAccelerator(KeyStroke.getKeyStroke(
-		        KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menu.add(menuItemSave);
 		menuItemSave.addActionListener(new ActionListener() {
 			@Override
-		    public void actionPerformed(ActionEvent e) {
-	           // Save config
+			public void actionPerformed(ActionEvent e) {
+				// Save config
 				int returnVal = fc.showSaveDialog(frame);
-				
-		        if (returnVal == JFileChooser.APPROVE_OPTION) {
-		            File file = fc.getSelectedFile();
-		            saveConfigFile(file);
-		        } else {
-		        	System.out.println("Open command cancelled by user.");
-		        }
-		    }
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = fc.getSelectedFile();
+					saveConfigFile(file);
+				} else {
+					System.out.println("Open command cancelled by user.");
+				}
+			}
 		});
 		menuItemLoad = new JMenuItem("Open");
 		menuItemLoad.setAccelerator(KeyStroke.getKeyStroke(
-		        KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menu.add(menuItemLoad);		
 		menuItemLoad.addActionListener(new ActionListener() {
 			@Override
-		    public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				int returnVal = fc.showOpenDialog(frame);
 				
-		        if (returnVal == JFileChooser.APPROVE_OPTION) {
-		            File file = fc.getSelectedFile();
-		            openConfigFile(file);
-		        } else {
-		        	System.out.println("Open command cancelled by user.");
-		        }
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				openConfigFile(file);
+			} else {
+				System.out.println("Open command cancelled by user.");
+			}
 		    }
 		});
 
@@ -279,12 +278,12 @@ public class SearchTool {
 		help.add(menuItemAbout);
 		menuItemAbout.addActionListener(new ActionListener() {
 			@Override
-		    public void actionPerformed(ActionEvent e) {				
-				
-		    	JOptionPane.showMessageDialog(null, 
-		    			PRODUCT_NAME + "\nVersion: " + PRODUCT_VERSION + "\n\nCopyright (c) 2018 \nAll Rights Reserved."
-		    			, "About Search Tool", JOptionPane.PLAIN_MESSAGE, smallIcon);
-		    }
+			public void actionPerformed(ActionEvent e) {				
+
+				JOptionPane.showMessageDialog(null, 
+					PRODUCT_NAME + "\nVersion: " + PRODUCT_VERSION + "\n\nCopyright (c) 2018 \nAll Rights Reserved."
+					, "About Search Tool", JOptionPane.PLAIN_MESSAGE, smallIcon);
+			}
 		});		
 		
 		
@@ -319,37 +318,37 @@ public class SearchTool {
 		destText.setBounds(10, 180, 400, 20);	
 		
 		// progress bar
-	    bar = new JProgressBar();
-	    bar.setBounds(10, 290, 410, 15);
-	    bar.setStringPainted(true);
-	    bar.setVisible(false);
+		bar = new JProgressBar();
+		bar.setBounds(10, 290, 410, 15);
+		bar.setStringPainted(true);
+		bar.setVisible(false);
 		
-	    // start button
+		// start button
 		startBtn = new JButton("Start");
 		startBtn.setBounds(10, 220, 100, 20);
 		startBtn.addActionListener(new ActionListener() {			
 			public void actionPerformed(ActionEvent e) {
-                worker = new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() {
-                    	startBtn.setEnabled(false);
-                    	try {
-							buttonPressed();
-						} catch (InterruptedException e) {
-					        infoLbl.setText("Canceled");
-					        bar.setValue(0);;
-						}
-                    	return null;
-                    }                    
-                    @Override
-                    protected void done() {
-                    	startBtn.setEnabled(true);
-		        		cancelBtn.setEnabled(false);
-                    	toggleInput(true);
-                    }
-                    
-                };                
-                worker.execute();
+                		worker = new SwingWorker<Void, Void>() {
+					@Override
+					protected Void doInBackground() {
+					startBtn.setEnabled(false);
+					try {
+						buttonPressed();
+					} catch (InterruptedException e) {
+						infoLbl.setText("Canceled");
+						bar.setValue(0);;
+					}
+					return null;
+					}                    
+					@Override
+					protected void done() {
+						startBtn.setEnabled(true);
+						cancelBtn.setEnabled(false);
+						toggleInput(true);
+					}
+
+				};                
+                		worker.execute();
 			}
 		} );
 		
@@ -358,12 +357,12 @@ public class SearchTool {
 		cancelBtn.setBounds(130, 220, 100, 20);
 		cancelBtn.setEnabled(false);
 		cancelBtn.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {		    	
-		    	if (worker != null) {
-			        // Stop the swing worker thread
-			        worker.cancel(true);
-		    	}
-		    }
+			public void actionPerformed(ActionEvent e) {		    	
+				if (worker != null) {
+					// Stop the swing worker thread
+					worker.cancel(true);
+				}
+			}
 		});
 		
 		// initialize frame
